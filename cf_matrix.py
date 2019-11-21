@@ -12,7 +12,8 @@ def make_confusion_matrix(cf,
                           xyplotlabels=True,
                           sum_stats=True,
                           figsize=None,
-                          cmap='Blues'):
+                          cmap='Blues',
+                          title=None):
     '''
     This function will make a pretty plot of an sklearn Confusion Matrix cm using a Seaborn heatmap visualization.
 
@@ -41,6 +42,8 @@ def make_confusion_matrix(cf,
 
     cmap:          Colormap of the values displayed from matplotlib.pyplot.cm. Default is 'Blues'
                    See http://matplotlib.org/examples/color/colormaps_reference.html
+                   
+    title:         Title for the heatmap. Default is None.
 
     '''
 
@@ -105,3 +108,6 @@ def make_confusion_matrix(cf,
         plt.xlabel('Predicted label' + stats_text)
     else:
         plt.xlabel(stats_text)
+    
+    if title:
+        plt.title(title)
