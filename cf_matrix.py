@@ -84,7 +84,17 @@ def make_confusion_matrix(cf,
             stats_text = "\n\nAccuracy={:0.3f}\nPrecision={:0.3f}\nRecall={:0.3f}\nF1 Score={:0.3f}".format(
                 accuracy,precision,recall,f1_score)
         else:
-            stats_text = "\n\nAccuracy={:0.3f}".format(accuracy)
+            #Metrics for Multiclassification Confusion Matrices
+            precision = np.diagonal(cf) / np.sum(cf, axis=0)
+            recall = np.diagonal(cf) / np.sum(cf, axis=1)
+            f1_score = (2*precision*recall) / (precision + recall)
+            # Generate strings with metrics
+            pr_str, rc_str, f1_str = [], [], []
+            for idx, (pr, rc, f1) in enumerate(zip(precision, recall, f1_score)):                
+                pr_str.append(f'Precision: {precision[idx]:.4f}      ')
+                rc_str.append(f'Recall:    {recall[idx]:.4f}         ')
+                f1_str.append(f'F1 Score:  {f1_score[idx]:.4f}       ')
+            stats_text = ''.join(pr_str) + '\n' + ''.join(rc_str) + '\n' + ''.join(f1_str)
     else:
         stats_text = ""
 
@@ -105,7 +115,10 @@ def make_confusion_matrix(cf,
 
     if xyplotlabels:
         plt.ylabel('True label')
-        plt.xlabel('Predicted label' + stats_text)
+        if len(cf)>2:
+            plt.xlabel('Predicted label' + '\n\n' + stats_text)
+        else:
+            plt.xlabel('Predicted label' + stats_text)
     else:
         plt.xlabel(stats_text)
     
